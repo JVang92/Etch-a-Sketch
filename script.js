@@ -1,78 +1,52 @@
-const GRID_SIZE = 16;
-const DARKNESS_SUBTRACT = 10;
+const DEFAULT_GRID_SIZE = 16;
+
 
 const gridAmountDisplay = document.getElementById("current_amount");
 const button = document.getElementById("grid_choice");
 const currentAmount = document.getElementById("grid_amount");
 const colorCheckBox = document.getElementById("random_color");
 const container = document.querySelector("#container");
+const hoverColor = "hsl(12, 2%, 40%)";
 
 
 
 
 
-
-
-button.addEventListener("click", () => changeGrid());
+button.addEventListener("click", () => createGrid(promptAmount()));
 colorCheckBox.addEventListener("click", () => console.log(isChecked()));
 
-initializeGrid(); //create and display the default grid
+createGrid(DEFAULT_GRID_SIZE); //create and display the default grid
 
 
 
-function initializeGrid(){
-for(let i = 0; i < GRID_SIZE * GRID_SIZE; i++){
-    const square = document.createElement("div"); // used to create each square instead of pasting in HTML
-    square.classList.add("square");
+function createGrid(size) {
+    container.innerHTML = ''; // clear existing grid
+    
+    // calculate size of each square based on the 600px container
+    const squareSize = 600 / size;
 
-
-    square.addEventListener("pointerover", function(e) { // when mouse goes over a square, it is filled in
-        if(isChecked()){
-        square.style.backgroundColor = getRandomColor();
-        }
-        else{square.classList.add("hovered");}
+    for (let i = 0; i < size * size; i++) {
+        const square = document.createElement("div");
+        square.classList.add("square");
         
-    })
+        // set width/height dynamically so they always fit the container
+        square.style.width = `${squareSize}px`;
+        square.style.height = `${squareSize}px`;
 
-    
-    
-    container.appendChild(square); // add squares in container div
-
+        square.addEventListener("pointerover", () => {
+            if (colorCheckBox.checked) {
+                square.style.backgroundColor = getRandomColor();
+            } else {
+                square.style.backgroundColor = hoverColor;
+            }
+        });
+        container.appendChild(square);
+    }
+    gridAmountDisplay.innerText = "Current Grid Amount: " + size + " X " + size;
 }
-}
-
-function changeGrid(){
-    let num = promptAmount();
-    const allSquares = document.querySelectorAll(".square"); // selects all instances of square into a node list.
-
-    console.log("button pressed");
-    allSquares.forEach(square => {
-        square.remove();
-    })
 
 
 
-    for(let i = 0; i < num * num; i++){
-    const square = document.createElement("div"); // used to create each square instead of pasting in HTML
-    square.classList.add("square");
-
-
-    square.addEventListener("pointerover", function(e) { // when mouse goes over a square, it is filled in
-        if(isChecked()){
-            square.style.backgroundColor = getRandomColor();
-        }
-        else{square.classList.add("hovered");}
-        
-
-    })
-    container.appendChild(square); // add squares in container div
-}
-    
-    container.style.gridTemplateColumns = "repeat(" + num + ", 1fr)"; // reformat grid 
-    gridAmountDisplay.innerText = "Current Grid Amount: " + num + " X " + num; // updates the text above gird
-
-
-}
 
 function promptAmount(){
     let inRange = false;

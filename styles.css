@@ -14,26 +14,20 @@ button{
 
 
 #container {
-    display: grid;
-    overflow: scroll;
-    grid-template-columns: repeat(16, 1fr);
-    min-width: 75vh;
-    min-height: 75vh;
-    width: auto;
-    height: auto;
-    gap: 1px; 
-
+    display: flex;
+    flex-wrap: wrap; /* allows squares to wrap to the next line */
+    width: 600px;    
+    height: 600px;   
+    border: 2px solid black;
 }
 
 .square {
-    padding: 1px;
+    box-sizing: border-box; 
+    flex-shrink: 0;
+    flex-grow: 0;
     border: 1px solid black;
-    background-color: hsl(13, 14%, 95%);
-
-
-
 }
 
 .hovered{
-    background-color: hsl(12, 2%, 40%);;
+    background-color: hsl(12, 2%, 40%);
 }
